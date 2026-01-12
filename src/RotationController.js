@@ -286,9 +286,22 @@ export class RotationController {
    * @param {number} degrees - Amount to rotate in degrees (defaults to 10°)
    */
   rotateClockwise(degrees = 10) {
-    const current = this.getRotationEuler();
-    const newY = (current.y - degrees + 360) % 360;
-    this.setRotationEuler(current.x, newY, current.z);
+    // Rotate directly using quaternions to avoid Euler angle ambiguity
+    const yAxis = new THREE.Vector3(0, 1, 0);
+    const rotationQuaternion = new THREE.Quaternion();
+    rotationQuaternion.setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(-degrees));
+    
+    // Apply rotation to current quaternion
+    this.model.quaternion.multiplyQuaternions(rotationQuaternion, this.model.quaternion);
+    
+    // Update internal quaternion state to match
+    this.quaternion.copy(this.model.quaternion);
+    this.quaternionTouchDown.copy(this.model.quaternion);
+    
+    // Trigger render if callback is set
+    if (this.onRender) {
+      this.onRender();
+    }
   }
 
   /**
@@ -296,9 +309,22 @@ export class RotationController {
    * @param {number} degrees - Amount to rotate in degrees (defaults to 10°)
    */
   rotateCounterclockwise(degrees = 10) {
-    const current = this.getRotationEuler();
-    const newY = (current.y + degrees) % 360;
-    this.setRotationEuler(current.x, newY, current.z);
+    // Rotate directly using quaternions to avoid Euler angle ambiguity
+    const yAxis = new THREE.Vector3(0, 1, 0);
+    const rotationQuaternion = new THREE.Quaternion();
+    rotationQuaternion.setFromAxisAngle(yAxis, THREE.MathUtils.degToRad(degrees));
+    
+    // Apply rotation to current quaternion
+    this.model.quaternion.multiplyQuaternions(rotationQuaternion, this.model.quaternion);
+    
+    // Update internal quaternion state to match
+    this.quaternion.copy(this.model.quaternion);
+    this.quaternionTouchDown.copy(this.model.quaternion);
+    
+    // Trigger render if callback is set
+    if (this.onRender) {
+      this.onRender();
+    }
   }
 
   /**
@@ -306,9 +332,22 @@ export class RotationController {
    * @param {number} degrees - Amount to increase pitch in degrees (defaults to 5°)
    */
   nudgePitchUp(degrees = 5) {
-    const current = this.getRotationEuler();
-    const newX = current.x + degrees;
-    this.setRotationEuler(newX, current.y, current.z);
+    // Rotate directly using quaternions to avoid Euler angle ambiguity
+    const xAxis = new THREE.Vector3(1, 0, 0);
+    const rotationQuaternion = new THREE.Quaternion();
+    rotationQuaternion.setFromAxisAngle(xAxis, THREE.MathUtils.degToRad(degrees));
+    
+    // Apply rotation to current quaternion
+    this.model.quaternion.multiplyQuaternions(rotationQuaternion, this.model.quaternion);
+    
+    // Update internal quaternion state to match
+    this.quaternion.copy(this.model.quaternion);
+    this.quaternionTouchDown.copy(this.model.quaternion);
+    
+    // Trigger render if callback is set
+    if (this.onRender) {
+      this.onRender();
+    }
   }
 
   /**
@@ -316,9 +355,22 @@ export class RotationController {
    * @param {number} degrees - Amount to decrease pitch in degrees (defaults to 5°)
    */
   nudgePitchDown(degrees = 5) {
-    const current = this.getRotationEuler();
-    const newX = current.x - degrees;
-    this.setRotationEuler(newX, current.y, current.z);
+    // Rotate directly using quaternions to avoid Euler angle ambiguity
+    const xAxis = new THREE.Vector3(1, 0, 0);
+    const rotationQuaternion = new THREE.Quaternion();
+    rotationQuaternion.setFromAxisAngle(xAxis, THREE.MathUtils.degToRad(-degrees));
+    
+    // Apply rotation to current quaternion
+    this.model.quaternion.multiplyQuaternions(rotationQuaternion, this.model.quaternion);
+    
+    // Update internal quaternion state to match
+    this.quaternion.copy(this.model.quaternion);
+    this.quaternionTouchDown.copy(this.model.quaternion);
+    
+    // Trigger render if callback is set
+    if (this.onRender) {
+      this.onRender();
+    }
   }
 
   /**
@@ -326,8 +378,21 @@ export class RotationController {
    * @param {number} degrees - Amount to adjust roll in degrees (positive = clockwise, defaults to 5°)
    */
   nudgeRoll(degrees = 5) {
-    const current = this.getRotationEuler();
-    const newZ = (current.z + degrees + 360) % 360;
-    this.setRotationEuler(current.x, current.y, newZ);
+    // Rotate directly using quaternions to avoid Euler angle ambiguity
+    const zAxis = new THREE.Vector3(0, 0, 1);
+    const rotationQuaternion = new THREE.Quaternion();
+    rotationQuaternion.setFromAxisAngle(zAxis, THREE.MathUtils.degToRad(degrees));
+    
+    // Apply rotation to current quaternion
+    this.model.quaternion.multiplyQuaternions(rotationQuaternion, this.model.quaternion);
+    
+    // Update internal quaternion state to match
+    this.quaternion.copy(this.model.quaternion);
+    this.quaternionTouchDown.copy(this.model.quaternion);
+    
+    // Trigger render if callback is set
+    if (this.onRender) {
+      this.onRender();
+    }
   }
 }
